@@ -233,7 +233,7 @@ select_stmt
  ;
 
 select_or_values
- : K_SELECT ( K_DISTINCT | K_ALL )? result_column ( ',' result_column )*
+ : K_SELECT ( K_DISTINCT | K_ALL )? result_column_abc ( ',' result_column_abc )*
    ( K_FROM ( table_or_subquery ( ',' table_or_subquery )* | join_clause ) )?
    ( K_WHERE expr )?
    ( K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )? )?
@@ -394,10 +394,14 @@ common_table_expression
  : table_name ( '(' column_name ( ',' column_name )* ')' )? K_AS '(' select_stmt ')'
  ;
 
-result_column
- : '*'
- | table_name '.' '*'
+result_column_abc
+ : all_columns
+ | table_name '.' all_columns
  | expr ( K_AS? column_alias )?
+ ;
+
+all_columns
+ : STAR
  ;
 
 table_or_subquery
@@ -425,7 +429,7 @@ join_constraint
  ;
 
 select_core
- : K_SELECT ( K_DISTINCT | K_ALL )? result_column ( ',' result_column )*
+ : K_SELECT ( K_DISTINCT | K_ALL )? result_column_abc ( ',' result_column_abc )*
    ( K_FROM ( table_or_subquery ( ',' table_or_subquery )* | join_clause ) )?
    ( K_WHERE expr )?
    ( K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )? )?
